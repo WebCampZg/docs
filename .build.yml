@@ -1,0 +1,15 @@
+# Configuration for builds.sr.ht
+image: alpine/edge
+
+packages:
+  - py-pip
+  - rsync
+
+sources:
+  - https://github.com/WebCampZg/docs
+
+tasks:
+  - build: |
+      cd webcampzg.github.io
+      pip install -r requirements.txt
+      make html
