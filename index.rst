@@ -18,3 +18,4 @@ Contents
    :maxdepth: 1
 
    roles
+   talk_selection
