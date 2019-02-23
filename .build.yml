@@ -3,13 +3,45 @@ image: alpine/edge
 
 packages:
   - py-pip
+  - py3-sphinx
   - rsync
+
+secrets:
+  - beca2c1b-68b8-41e3-81b4-6480fcb1f886
 
 sources:
   - https://github.com/WebCampZg/docs
 
 tasks:
+  - prerequisites: |
+      sudo pip3 install guzzle_sphinx_theme
+
   - build: |
+      cd docs
+      sphinx-build-3 -b html . _build/html
+
+  - clone: |
+      ssh-keyscan -t rsa github.com >> .ssh/known_hosts
+      git clone git@github.com:WebCampZg/webcampzg.github.io.git
+
+  - copy: |
+      rsync --recursive \
+            --verbose \
+            --delete \
+            --exclude .git \
+            --exclude CNAME \
+            --exclude README.md \
+            docs/_build/html/ \
+            webcampzg.github.io/
+
+  - publish: |
       cd webcampzg.github.io
-      pip install -r requirements.txt
-      make html
+      git config --local user.email "publisher@webcampzg.org"
+      git config --local user.name "Publisher"
+      if [ -n "$(git status --porcelain)" ];
+      then
+        git add .
+        git commit -m "New content"
+        git push
+      fi
+
