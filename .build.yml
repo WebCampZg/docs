@@ -29,6 +29,7 @@ tasks:
             --verbose \
             --delete \
             --exclude .git \
+            --exclude .doctrees \
             --exclude CNAME \
             --exclude README.md \
             docs/_build/html/ \
@@ -43,5 +44,7 @@ tasks:
         git add .
         git commit -m "New content"
         git push
+      else
+        echo "No new content."
       fi
 
