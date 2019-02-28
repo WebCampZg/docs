@@ -19,3 +19,4 @@ Contents
 
    roles
    talk_selection
+   web/index
